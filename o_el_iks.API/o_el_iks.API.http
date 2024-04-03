@@ -1,0 +1,6 @@
+@o_el_iks.API_HostAddress = http://localhost:5086
+
+GET {{o_el_iks.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
