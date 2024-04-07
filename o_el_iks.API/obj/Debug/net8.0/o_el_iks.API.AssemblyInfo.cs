@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("o_el_iks.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54c3426c687b827d180ef7ebbdaf044949ad42ba")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f4adf4863d395bac7cab07b21ec404e92375f708")]
 [assembly: System.Reflection.AssemblyProductAttribute("o_el_iks.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("o_el_iks.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

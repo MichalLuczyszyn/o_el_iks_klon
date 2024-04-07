@@ -11,19 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="75db7cb1-0e8e-478a-9475-b5ec71fed9e6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/o_el_iks.API/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/o_el_iks.API.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/o_el_iks.API.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/Debug/net8.0/o_el_iks.API.csproj.AssemblyReference.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/o_el_iks.API.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/o_el_iks.API.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/o_el_iks.API.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/o_el_iks.API.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/project.packagespec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/o_el_iks.API/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/o_el_iks.API/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,9 +23,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2ekFi0cY1OSTu6dDLhfFqNPbXB2" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -46,7 +36,7 @@
     ".NET Launch Settings Profile.o_el_iks.API: http.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "register",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -118,7 +108,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1712440792462</updated>
-      <workItem from="1712440793666" duration="3855000" />
+      <workItem from="1712440793666" duration="4216000" />
     </task>
     <servers />
   </component>
