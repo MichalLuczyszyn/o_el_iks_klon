@@ -38,29 +38,13 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
-List<RegistrationData> users = new List<RegistrationData>();
-
-app.MapPost("/register", ([FromBody] RegistrationData data) =>
+app.MapPost("/register", ( RegistrationData data) =>
 {
     if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
     {
         return Results.BadRequest("Incorrect data.");
     }
-    RegistrationData newUser = new RegistrationData { email = data.email, password = data.password };
-    users.Add(newUser);
     return Results.Ok("Registration successful.");
-});
-
-app.MapPost("/logging", ([FromBody] LoggingData data) =>
-{
-    for (int i = 0; i < users.Count; i++)
-    {
-        if (data.email == users[i].email && data.password == users[i].password)
-        {
-            return Results.Ok("Logging successful.");
-        }
-    }
-    return Results.BadRequest("Incorrect logging data.");
 });
 
 
@@ -72,12 +56,6 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 }
 
 public class RegistrationData
-{
-    public string email { get; set; }
-    public string password { get; set; }
-}
-
-public class LoggingData
 {
     public string email { get; set; }
     public string password { get; set; }
