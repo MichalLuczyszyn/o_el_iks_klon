@@ -39,6 +39,8 @@ app.MapGet("/weatherforecast", () =>
     .WithOpenApi();
 
 
+app.MapGet("toDelete", () => "Delete it later");
+
 app.MapPost("/register", ( RegistrationData data) =>
 {
     if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
