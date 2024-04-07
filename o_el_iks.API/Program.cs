@@ -38,8 +38,9 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
+List<RegistrationData> users = new List<RegistrationData>();
 
-app.MapPost("/register", ( RegistrationData data) =>
+app.MapPost("/register", ([FromBody] RegistrationData data) =>
 {
     if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
     {
@@ -69,6 +70,12 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 }
 
 public class RegistrationData
+{
+    public string email { get; set; }
+    public string password { get; set; }
+}
+
+public class LoggingData
 {
     public string email { get; set; }
     public string password { get; set; }
