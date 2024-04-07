@@ -46,6 +46,8 @@ app.MapPost("/register", ([FromBody] RegistrationData data) =>
     {
         return Results.BadRequest("Incorrect data.");
     }
+    RegistrationData newUser = new RegistrationData { email = data.email, password = data.password };
+    users.Add(newUser);
     return Results.Ok("Registration successful.");
 });
 
