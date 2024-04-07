@@ -48,6 +48,19 @@ app.MapPost("/register", ( RegistrationData data) =>
     return Results.Ok("Registration successful.");
 });
 
+app.MapPost("/logging", ([FromBody] LoggingData data) =>
+{
+    for (int i = 0; i < users.Count; i++)
+    {
+        if (data.email == users[i].email && data.password == users[i].password)
+        {
+            return Results.Ok("Logging successful.");
+        }
+    }
+    return Results.BadRequest("Incorrect logging data.");
+});
+
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
