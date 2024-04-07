@@ -1,25 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj": {}
+    "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj": {
+    "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj",
+        "projectUniqueName": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj",
         "projectName": "o_el_iks.API",
-        "projectPath": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj",
+        "projectPath": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks_klon\\o_el_iks.API\\o_el_iks.API.csproj",
         "packagesPath": "C:\\Users\\micha\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks.API\\obj\\",
+        "outputPath": "C:\\Users\\micha\\RiderProjects\\o_el_iks_klon\\o_el_iks_klon\\o_el_iks.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\micha\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\micha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,6 +40,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.2.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.2, )"
@@ -66,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

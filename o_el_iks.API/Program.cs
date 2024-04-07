@@ -36,9 +36,28 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
+app.MapPost("/register", (RegistrationData data) =>
+{
+    if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
+    {
+        return Results.BadRequest("Incorrect data.");
+    }
+    else
+    {
+        return Results.Ok("Registration successful.");
+    }
+});
+
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
+public class RegistrationData
+{
+    public string email { get; set; }
+    public string password { get; set; }
+}
+
