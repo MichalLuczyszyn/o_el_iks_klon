@@ -53,12 +53,10 @@ app.MapPost("/register", ([FromBody] RegistrationData data) =>
 
 app.MapPost("/logging", ([FromBody] LoggingData data) =>
 {
-    for (int i = 0; i < users.Count; i++)
+    var user = users.FirstOrDefault(u => u.email == data.email && u.password == data.password);
+    if (user != null)
     {
-        if (data.email == users[i].email && data.password == users[i].password)
-        {
-            return Results.Ok("Logging successful.");
-        }
+        return Results.Ok("Logging successful.");
     }
     return Results.BadRequest("Incorrect logging data.");
 });
