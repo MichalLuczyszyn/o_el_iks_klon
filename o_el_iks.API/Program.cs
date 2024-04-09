@@ -51,14 +51,14 @@ app.MapPost("/register", ([FromBody] RegistrationData data) =>
     return Results.Ok("Registration successful.");
 });
 
-app.MapPost("/logging", ([FromBody] LoggingData data) =>
+app.MapPost("/sign-in", ([FromBody] LoggingData data) =>
 {
-    var user = users.FirstOrDefault(u => u.email == data.email && u.password == data.password);
-    if (user != null)
+    var user = users.Any(u => u.email == data.email && u.password == data.password);
+    if (user)
     {
-        return Results.Ok("Logging successful.");
+        return Results.Ok("Sign in successful.");
     }
-    return Results.BadRequest("Incorrect logging data.");
+    return Results.BadRequest("Incorrect e-mail or password.");
 });
 
 app.Run();
