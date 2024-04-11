@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,15 +39,42 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
+List<RegistrationData> users = new List<RegistrationData>();
+List<AuctionData> auctions = new List<AuctionData>();
 
-app.MapPost("/register", ( RegistrationData data) =>
+app.MapPost("/register", ([FromBody] RegistrationData data) =>
 {
     if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
     {
         return Results.BadRequest("Incorrect data.");
     }
+    RegistrationData newUser = new RegistrationData { email = data.email, password = data.password };
+    users.Add(newUser);
     return Results.Ok("Registration successful.");
 });
+
+app.MapPost("/sign-in", ([FromBody] LoggingData data) =>
+{
+    var user = users.Any(u => u.email == data.email && u.password == data.password);
+    if (user)
+    {
+        return Results.Ok("Sign in successful.");
+    }
+    return Results.BadRequest("Incorrect e-mail or password.");
+});
+
+app.MapPost("/create-auction", ([FromBody] AuctionData data) =>
+{
+    AuctionData newAuction = new AuctionData
+    {
+        price = data.price, location = data.location, dateOfStart = data.dateOfStart,
+        dateOfEnd = data.dateOfEnd, condition = data.condition
+    };
+    auctions.Add(newAuction);
+    return Results.Ok("Auction created.");
+});
+
+app.MapGet("/view-auctions", () => auctions);
 
 app.Run();
 
@@ -59,4 +87,26 @@ public class RegistrationData
 {
     public string email { get; set; }
     public string password { get; set; }
+}
+
+public class LoggingData
+{
+    public string email { get; set; }
+    public string password { get; set; }
+}
+
+public enum TypeOfItem
+{
+    New = 1,
+    Old = 2,
+    Used = 3
+}
+
+public class AuctionData
+{
+    public float price { get; set; }
+    public string location { get; set; } 
+    public DateOnly dateOfStart { get; set; }
+    public DateOnly dateOfEnd { get; set; }
+    public TypeOfItem condition { get; set; }
 }
