@@ -1,6 +1,5 @@
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddScoped<ICookieToken, CookieToken>();
 
 var app = builder.Build();
 
@@ -20,7 +19,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
 var summaries = new[]
 {
@@ -63,11 +61,13 @@ app.MapPost("/register", ([FromBody] RegistrationData data) =>
     return Results.Ok("Registration successful.");
 });
 
-app.MapPost("/sign-in", ([FromBody] LoggingData data) =>
+app.MapPost("/sign-in", ([FromBody] LoggingData data, ICookieToken cookieToken, HttpContext httpContext) =>
 {
     var user = users.Any(u => u.email == data.email && u.password == ShaHash(data.password));
     if (user)
     {
+        var token = cookieToken.GenerateToken();
+        httpContext.Response.Cookies.Append("token", token);
         return Results.Ok("Sign in successful.");
     }
     return Results.BadRequest("Incorrect e-mail or password.");
@@ -97,9 +97,9 @@ static string ShaHash(string password)
     {
         byte[] hashedBytes = hashedPassword.ComputeHash(Encoding.UTF8.GetBytes(password));
         StringBuilder passwordBuilder = new StringBuilder();
-        for (int i = 0; i < hashedBytes.Length; i++)
+        foreach (var t in hashedBytes)
         {
-            passwordBuilder.Append(hashedBytes[i].ToString("x2"));
+            passwordBuilder.Append(t.ToString("x2"));
         }
 
         return passwordBuilder.ToString();
@@ -120,8 +120,8 @@ public class RegistrationData
 
 public class LoggingData
 {
-    public string email { get; }
-    public string password { get; }
+    public string email { get; set; }
+    public string password { get; set; }
 }
 
 public enum TypeOfItem
@@ -138,4 +138,17 @@ public class AuctionData
     public DateOnly dateOfStart { get; set; }
     public DateOnly dateOfEnd { get; set; }
     public TypeOfItem condition { get; set; }
+}
+
+public interface ICookieToken
+{
+    string GenerateToken();
+}
+
+public class CookieToken : ICookieToken
+{
+    public string GenerateToken()
+    {
+        return "zalogowany";
+    }
 }
