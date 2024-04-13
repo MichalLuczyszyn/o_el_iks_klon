@@ -1,4 +1,6 @@
-using System.Runtime.InteropServices.JavaScript;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();
 
@@ -44,24 +47,33 @@ List<AuctionData> auctions = new List<AuctionData>();
 
 app.MapPost("/register", ([FromBody] RegistrationData data) =>
 {
+    var userExists = users.Any(u => u.email == data.email);
+    if (userExists)
+    {
+        return Results.BadRequest("User with that e-mail already exists.");
+    }
     if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
     {
         return Results.BadRequest("Incorrect data.");
     }
-    RegistrationData newUser = new RegistrationData { email = data.email, password = data.password };
+
+    string hashedPassword = ShaHash(data.password);
+    RegistrationData newUser = new RegistrationData { email = data.email, password = hashedPassword };
     users.Add(newUser);
     return Results.Ok("Registration successful.");
 });
 
 app.MapPost("/sign-in", ([FromBody] LoggingData data) =>
 {
-    var user = users.Any(u => u.email == data.email && u.password == data.password);
+    var user = users.Any(u => u.email == data.email && u.password == ShaHash(data.password));
     if (user)
     {
         return Results.Ok("Sign in successful.");
     }
     return Results.BadRequest("Incorrect e-mail or password.");
 });
+
+app.MapGet("/view-users", () => users);
 
 app.MapPost("/create-auction", ([FromBody] AuctionData data) =>
 {
@@ -78,6 +90,23 @@ app.MapGet("/view-auctions", () => auctions);
 
 app.Run();
 
+
+static string ShaHash(string password)
+{
+    using (SHA256 hashedPassword = SHA256.Create())
+    {
+        byte[] hashedBytes = hashedPassword.ComputeHash(Encoding.UTF8.GetBytes(password));
+        StringBuilder passwordBuilder = new StringBuilder();
+        for (int i = 0; i < hashedBytes.Length; i++)
+        {
+            passwordBuilder.Append(hashedBytes[i].ToString("x2"));
+        }
+
+        return passwordBuilder.ToString();
+    }
+}
+
+
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
@@ -91,8 +120,8 @@ public class RegistrationData
 
 public class LoggingData
 {
-    public string email { get; set; }
-    public string password { get; set; }
+    public string email { get; }
+    public string password { get; }
 }
 
 public enum TypeOfItem
