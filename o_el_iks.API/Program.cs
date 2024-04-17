@@ -43,9 +43,11 @@ app.MapGet("/weatherforecast", () =>
     .WithName("GetWeatherForecast")
     .WithOpenApi();
 
+List<RegistrationData> users = new List<RegistrationData>();
 
 
 app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider) =>
+{
     {
         try
         {
@@ -96,3 +98,4 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
+
