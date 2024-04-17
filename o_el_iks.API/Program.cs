@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using o_el_iks.API;
+using o_el_iks.API.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IUserProvider, UserProvider>();
+builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
 
 var app = builder.Build();
 
@@ -16,7 +22,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
 var summaries = new[]
 {
@@ -40,42 +45,57 @@ app.MapGet("/weatherforecast", () =>
 
 List<RegistrationData> users = new List<RegistrationData>();
 
-app.MapPost("/register", ([FromBody] RegistrationData data) =>
+
+app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider) =>
 {
-    if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
     {
-        return Results.BadRequest("Incorrect data.");
+        try
+        {
+            userProvider.Register(data);
+            return Results.Ok("Registration successful");
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
     }
-    RegistrationData newUser = new RegistrationData { email = data.email, password = data.password };
-    users.Add(newUser);
-    return Results.Ok("Registration successful.");
+    );
+
+app.MapPost("/sign-in",
+    (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) =>
+    {
+        try
+        {
+            userProvider.SignIn(data, tokenProvider, httpContext);
+            return Results.Ok("Sing in successful.");
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
+    });
+
+app.MapGet("/view-users", (IUserProvider userProvider) => userProvider.GetUsers());
+
+app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider auctionProvider) =>
+{
+    try
+    {
+        auctionProvider.AddAuction(data);
+        return Results.Ok("Auction created.");
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(ex.Message);
+    }
 });
 
-app.MapPost("/sign-in", ([FromBody] LoggingData data) =>
-{
-    var user = users.Any(u => u.email == data.email && u.password == data.password);
-    if (user)
-    {
-        return Results.Ok("Sign in successful.");
-    }
-    return Results.BadRequest("Incorrect e-mail or password.");
-});
-
+app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
 app.Run();
+
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-public class RegistrationData
-{
-    public string email { get; set; }
-    public string password { get; set; }
-}
-
-public class LoggingData
-{
-    public string email { get; set; }
-    public string password { get; set; }
-}
