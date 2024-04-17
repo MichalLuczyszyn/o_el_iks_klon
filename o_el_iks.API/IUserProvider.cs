@@ -1,4 +1,6 @@
-﻿namespace o_el_iks.API;
+﻿using o_el_iks.API.Entities;
+
+namespace o_el_iks.API;
 
 public interface IUserProvider
 {

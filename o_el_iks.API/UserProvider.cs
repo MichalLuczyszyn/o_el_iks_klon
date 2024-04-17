@@ -1,13 +1,14 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using o_el_iks.API.Entities;
 
 namespace o_el_iks.API;
 
-public class UserService
+public class UserProvider : IUserProvider
 {
-    static List<Entites.RegistrationData> users = new List<Entites.RegistrationData>();
+    static List<RegistrationData> users = new List<RegistrationData>();
 
-    public IResult Register(Entites.RegistrationData data)
+    public IResult Register(RegistrationData data)
     {
         var userExists = users.Any(u => u.email == data.email);
         if (userExists)
@@ -20,12 +21,12 @@ public class UserService
             return Results.BadRequest("Incorrect data.");
         }
         string hashedPassword = ShaHash(data.password);
-        Entites.RegistrationData newUser = new Entites.RegistrationData { email = data.email, password = hashedPassword };
+        RegistrationData newUser = new RegistrationData { email = data.email, password = hashedPassword };
         users.Add(newUser);
         return Results.Ok("Registration successful.");
     }
 
-    public IResult SignIn(Entites.SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
+    public IResult SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
     {
         var user = users.Any(u => u.email == data.email && u.password == ShaHash(data.password));
         if (user)
@@ -52,7 +53,7 @@ public class UserService
         }
     }
 
-    public List<Entites.RegistrationData> GetUsers()
+    public List<RegistrationData> GetUsers()
     {
         return users;
     }

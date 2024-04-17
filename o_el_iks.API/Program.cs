@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using o_el_iks.API;
+using o_el_iks.API.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<IUserProvider, UserProvider>();
+builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
 
 var app = builder.Build();
 
@@ -44,15 +45,15 @@ app.MapGet("/weatherforecast", () =>
 
 
 
-app.MapPost("/register", ([FromBody] Entites.RegistrationData data, UserService userService) => userService.Register(data));
+app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userService) => userService.Register(data));
 
-app.MapPost("/sign-in", (Entites.SignInData data, UserService userService, ITokenProvider tokenProvider, HttpContext httpContext) => userService.SignIn(data, tokenProvider, httpContext));
+app.MapPost("/sign-in", (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) => userProvider.SignIn(data, tokenProvider, httpContext));
 
-app.MapGet("/view-users", (UserService userService) => userService.GetUsers());
+app.MapGet("/view-users", (IUserProvider userProvider) => userProvider.GetUsers());
 
-app.MapPost("/create-auction", ([FromBody] Entites.AuctionData data, AuctionService auctionService) => auctionService.CreateAuction(data));
+app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider auctionProvider) => auctionProvider.AddAuction(data));
 
-app.MapGet("/view-auctions", (AuctionService auctionService) => auctionService.GetAuctions());
+app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
 app.Run();
 
 

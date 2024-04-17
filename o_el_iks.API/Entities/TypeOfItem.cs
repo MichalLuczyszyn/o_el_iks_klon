@@ -1,4 +1,4 @@
-﻿namespace o_el_iks.API;
+﻿namespace o_el_iks.API.Entities;
 
 public enum TypeOfItem
 {
