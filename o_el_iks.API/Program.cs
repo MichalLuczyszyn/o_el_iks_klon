@@ -46,12 +46,12 @@ app.MapGet("/weatherforecast", () =>
 List<RegistrationData> users = new List<RegistrationData>();
 
 
-app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider) =>
+app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider, IAuctionsProvider auctionsProvider) =>
 {
     {
         try
         {
-            userProvider.Register(data);
+            userProvider.Register(data, auctionsProvider);
             return Results.Ok("Registration successful");
         }
         catch (ArgumentException ex)
@@ -59,7 +59,7 @@ app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userPr
             return Results.BadRequest(ex.Message);
         }
     }
-    );
+});
 
 app.MapPost("/sign-in",
     (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) =>

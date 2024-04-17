@@ -6,9 +6,9 @@ namespace o_el_iks.API;
 
 public class UserProvider : IUserProvider
 {
-    static List<RegistrationData> users = new List<RegistrationData>();
+    static List<User> users = new List<User>();
 
-    public void Register(RegistrationData data)
+    public void Register(RegistrationData data, IAuctionsProvider auctionsProvider)
     {
         var userExists = users.Any(u => u.email == data.email);
         if (userExists)
@@ -21,7 +21,12 @@ public class UserProvider : IUserProvider
             throw new ArgumentException("Incorrect data.");
         }
         string hashedPassword = ShaHash(data.password);
-        RegistrationData newUser = new RegistrationData { email = data.email, password = hashedPassword };
+        var newUser = new User(auctionsProvider)
+        {
+            email = data.email,
+            password = hashedPassword,
+            accountCreationDate = DateTimeOffset.UtcNow
+        };
         users.Add(newUser);
     }
 
@@ -51,7 +56,7 @@ public class UserProvider : IUserProvider
         }
     }
 
-    public List<RegistrationData> GetUsers()
+    public List<User> GetUsers()
     {
         return users;
     }
