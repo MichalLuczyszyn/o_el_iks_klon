@@ -9,7 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<AuctionService>();
+builder.Services.AddScoped<IAuctionsProvider, AuctionProvider>();
 
 var app = builder.Build();
 
@@ -50,9 +50,9 @@ app.MapPost("/sign-in", (Entites.SignInData data, UserService userService, IToke
 
 app.MapGet("/view-users", (UserService userService) => userService.GetUsers());
 
-app.MapPost("/create-auction", ([FromBody] Entites.AuctionData data, AuctionService auctionService) => auctionService.CreateAuction(data));
+app.MapPost("/create-auction", ([FromBody] Entites.AuctionData data, IAuctionsProvider auctionProvider) => auctionProvider.AddAuction(data));
 
-app.MapGet("/view-auctions", (AuctionService auctionService) => auctionService.GetAuctions());
+app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
 app.Run();
 
 

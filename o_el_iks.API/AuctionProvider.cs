@@ -1,10 +1,10 @@
 ﻿namespace o_el_iks.API;
 
-public class AuctionService
+public class AuctionProvider : IAuctionsProvider
 {
     static List<Entites.AuctionData> auctions = new List<Entites.AuctionData>();
     
-    public IResult CreateAuction(Entites.AuctionData data)
+    public IResult AddAuction(Entites.AuctionData data)
     {
         Entites.AuctionData newAuction = new Entites.AuctionData
         {
@@ -14,7 +14,8 @@ public class AuctionService
         auctions.Add(newAuction);
         return Results.Ok("Auction created.");
     }
-    
+
+
     public List<Entites.AuctionData> GetAuctions()
     {
         return auctions;
