@@ -8,34 +8,32 @@ public class UserProvider : IUserProvider
 {
     static List<RegistrationData> users = new List<RegistrationData>();
 
-    public IResult Register(RegistrationData data)
+    public void Register(RegistrationData data)
     {
         var userExists = users.Any(u => u.email == data.email);
         if (userExists)
         {
-            return Results.BadRequest("User with that e-mail already exists.");
+            throw new ArgumentException("User with that email already exists");
         }
 
         if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
         {
-            return Results.BadRequest("Incorrect data.");
+            throw new ArgumentException("Incorrect data.");
         }
         string hashedPassword = ShaHash(data.password);
         RegistrationData newUser = new RegistrationData { email = data.email, password = hashedPassword };
         users.Add(newUser);
-        return Results.Ok("Registration successful.");
     }
 
-    public IResult SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
+    public void SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
     {
         var user = users.Any(u => u.email == data.email && u.password == ShaHash(data.password));
-        if (user)
+        if (!user)
         {
-            var token = tokenProvider.GenerateToken();
-            httpContext.Response.Cookies.Append("token", token);
-            return Results.Ok("Sign in successful.");
+            throw new ArgumentException("Incorrect email or password.");
         }
-        return Results.BadRequest("Incorrect e-mail or password.");
+        var token = tokenProvider.GenerateToken();
+        httpContext.Response.Cookies.Append("token", token);
     }
     
     static string ShaHash(string password)

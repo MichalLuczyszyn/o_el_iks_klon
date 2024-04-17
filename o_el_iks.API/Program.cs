@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using o_el_iks.API;
 using o_el_iks.API.Entities;
@@ -44,14 +45,48 @@ app.MapGet("/weatherforecast", () =>
 
 
 
+app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider) =>
+    {
+        try
+        {
+            userProvider.Register(data);
+            return Results.Ok("Registration successful");
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
+    }
+    );
 
-app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userService) => userService.Register(data));
-
-app.MapPost("/sign-in", (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) => userProvider.SignIn(data, tokenProvider, httpContext));
+app.MapPost("/sign-in",
+    (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) =>
+    {
+        try
+        {
+            userProvider.SignIn(data, tokenProvider, httpContext);
+            return Results.Ok("Sing in successful.");
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
+    });
 
 app.MapGet("/view-users", (IUserProvider userProvider) => userProvider.GetUsers());
 
-app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider auctionProvider) => auctionProvider.AddAuction(data));
+app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider auctionProvider) =>
+{
+    try
+    {
+        auctionProvider.AddAuction(data);
+        return Results.Ok("Auction created.");
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(ex.Message);
+    }
+});
 
 app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
 app.Run();
