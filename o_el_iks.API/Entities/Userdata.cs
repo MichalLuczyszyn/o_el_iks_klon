@@ -2,16 +2,12 @@
 
 public class User
 {
-    public string name { get; set; }
-    public string surname { get; set; }
-    public DateTimeOffset birthDate { get; set; }
-    public DateTimeOffset accountCreationDate { get; set; }
-    public List<AuctionData> auctions { get; set; }
-    public string email { get; set; }
-    public string password { get; set; }
-
-    public User(IAuctionsProvider auctionsProvider)
-    {
-        auctions = auctionsProvider.GetAuctions();
-    }
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    public DateTimeOffset BirthDate { get; set; }
+    public DateTimeOffset AccountCreationDate { get; set; }
+    public List<AuctionData> Auctions { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+    
 }

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using o_el_iks.API;
 using o_el_iks.API.Entities;
@@ -12,6 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IUserProvider, UserProvider>();
 builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
+builder.Services.AddScoped<IAuctionsService, AuctionsService>();
 
 var app = builder.Build();
 
@@ -46,12 +46,12 @@ app.MapGet("/weatherforecast", () =>
 List<RegistrationData> users = new List<RegistrationData>();
 
 
-app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider, IAuctionsProvider auctionsProvider) =>
+app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userProvider) =>
 {
     {
         try
         {
-            userProvider.Register(data, auctionsProvider);
+            userProvider.Register(data);
             return Results.Ok("Registration successful");
         }
         catch (ArgumentException ex)
