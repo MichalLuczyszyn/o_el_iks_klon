@@ -1,6 +1,7 @@
 ﻿using o_el_iks.API.Entities;
+using o_el_iks.API.Interfaces;
 
-namespace o_el_iks.API;
+namespace o_el_iks.API.Domain_Services;
 
 public class AuctionsService(IAuctionsProvider auctionsProvider) : IAuctionsService
 { 

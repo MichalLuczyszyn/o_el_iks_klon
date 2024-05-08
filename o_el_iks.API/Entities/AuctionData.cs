@@ -2,9 +2,41 @@
 
 public class AuctionData
 {
-    public float Price { get; set; }
-    public string Location { get; set; } 
-    public DateTimeOffset DateOfStart { get; set; }
-    public DateTimeOffset DateOfEnd { get; set; }
-    public TypeOfItem Condition { get; set; }
+    private float _price;
+    public float Price
+    {
+        get => _price;
+        set
+        {
+            _price = value;
+            LastModifiedAt = DateTimeOffset.Now;
+        }
+    }
+    public string Location{ get; set;}
+
+    public DateTimeOffset DateOfStart{ get; set;}
+
+    private DateTimeOffset _dateOfEnd;
+    public DateTimeOffset DateOfEnd
+    {
+        get => _dateOfEnd;
+        set
+        {
+            _dateOfEnd = value;
+            LastModifiedAt = DateTimeOffset.Now;
+        }
+    }
+
+    private TypeOfItem _condition;
+    public TypeOfItem Condition
+    {
+        get => _condition;
+        set
+        {
+            _condition = value;
+            LastModifiedAt = DateTimeOffset.Now;
+        }
+    }
+
+    public DateTimeOffset LastModifiedAt { get; private set; }
 }

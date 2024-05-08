@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using o_el_iks.API;
+using o_el_iks.API.Domain_Services;
 using o_el_iks.API.Entities;
+using o_el_iks.API.Interfaces;
+using o_el_iks.API.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,7 @@ builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IUserProvider, UserProvider>();
 builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
 builder.Services.AddScoped<IAuctionsService, AuctionsService>();
+builder.Services.AddScoped<IAuctionsEditor, AuctionsEditor>();
 var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(connectionString));
 var app = builder.Build();
@@ -93,6 +97,22 @@ app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider a
 });
 
 app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
+
+app.MapPut("/edit-auction", (string location, AuctionData data, IAuctionsEditor auctionsEditor) =>
+{
+    try
+    {
+        auctionsEditor.EditAuction(location, data);
+        return Results.Ok("Auction edited.");
+    }
+    catch (Exception ex)
+    {
+        return Results.BadRequest(ex.Message);
+    }
+});
+
+
+
 app.Run();
 
 

@@ -1,10 +1,11 @@
 ﻿using o_el_iks.API.Entities;
+using o_el_iks.API.Interfaces;
 
-namespace o_el_iks.API;
+namespace o_el_iks.API.Providers;
 
 public class AuctionsProvider : IAuctionsProvider
 {
-    public static List<AuctionData> _auctions = new List<AuctionData>();
+    public static List<AuctionData> Auctions = new List<AuctionData>();
 
     public void AddAuction(AuctionData data)
     {
@@ -19,13 +20,13 @@ public class AuctionsProvider : IAuctionsProvider
             Location = data.Location, 
             DateOfStart = data.DateOfStart,
             DateOfEnd = data.DateOfEnd, 
-            Condition = data.Condition
+            Condition = data.Condition,
         };
-        _auctions.Add(newAuction);
+        Auctions.Add(newAuction);
     }
     
     public List<AuctionData> GetAuctions()
     {
-        return _auctions;
+        return Auctions;
     }
 }
