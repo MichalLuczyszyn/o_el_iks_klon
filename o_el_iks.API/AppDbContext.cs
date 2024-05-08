@@ -12,8 +12,4 @@ public class AppDbContext : DbContext
     {
         
     }
-    
-    
-    
-    
 }

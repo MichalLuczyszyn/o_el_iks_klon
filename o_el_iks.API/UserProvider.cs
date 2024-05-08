@@ -21,7 +21,7 @@ public class UserProvider(IAuctionsService auctionsService) : IUserProvider
             throw new ArgumentException("Incorrect data.");
         }
         string hashedPassword = ShaHash(data.Password);
-        User newUser = new User { Email = data.Email, Password = hashedPassword };
+        var newUser = new User { Email = data.Email, Password = hashedPassword };
         _users.Add(newUser);
     }
 
