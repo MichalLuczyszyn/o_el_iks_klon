@@ -6,5 +6,5 @@ public interface IUserProvider
 {
     void Register(RegistrationData data);
     void SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext);
-    List<RegistrationData> GetUsers();
+    List<User> GetUsers();
 }

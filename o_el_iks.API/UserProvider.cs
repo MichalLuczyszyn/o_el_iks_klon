@@ -4,30 +4,30 @@ using o_el_iks.API.Entities;
 
 namespace o_el_iks.API;
 
-public class UserProvider : IUserProvider
+public class UserProvider(IAuctionsService auctionsService) : IUserProvider
 {
-    static List<RegistrationData> users = new List<RegistrationData>();
+    public static List<User> _users = new List<User>();
 
     public void Register(RegistrationData data)
     {
-        var userExists = users.Any(u => u.email == data.email);
+        var userExists = _users.Any(u => u.Email == data.Email);
         if (userExists)
         {
             throw new ArgumentException("User with that email already exists");
         }
 
-        if (string.IsNullOrWhiteSpace(data.email) || string.IsNullOrWhiteSpace(data.password))
+        if (string.IsNullOrWhiteSpace(data.Email) || string.IsNullOrWhiteSpace(data.Password))
         {
             throw new ArgumentException("Incorrect data.");
         }
-        string hashedPassword = ShaHash(data.password);
-        RegistrationData newUser = new RegistrationData { email = data.email, password = hashedPassword };
-        users.Add(newUser);
+        string hashedPassword = ShaHash(data.Password);
+        var newUser = new User { Email = data.Email, Password = hashedPassword };
+        _users.Add(newUser);
     }
 
     public void SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
     {
-        var user = users.Any(u => u.email == data.email && u.password == ShaHash(data.password));
+        var user = _users.Any(u => u.Email == data.Email && u.Password == ShaHash(data.Password));
         if (!user)
         {
             throw new ArgumentException("Incorrect email or password.");
@@ -51,9 +51,12 @@ public class UserProvider : IUserProvider
         }
     }
 
-    public List<RegistrationData> GetUsers()
+    public List<User> GetUsers()
     {
-        return users;
+        foreach (var user in _users)
+        {
+            user.Auctions = auctionsService.ViewAuctions();
+        }
+        return _users;
     }
-
 }

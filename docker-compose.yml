@@ -1,0 +1,25 @@
+﻿services:
+  o_el_iks.api:
+    image: o_el_iks.api
+    container_name: o_el_iks.api
+    build:
+      context: .
+      dockerfile: o_el_iks.API/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+  
+  o_el_iks.database:
+    image: postgres:latest
+    container_name: o_el_iks.database
+    environment:
+      - POSTGRES_DB=o_el_iks
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/o_el_iks-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    
+    
+    

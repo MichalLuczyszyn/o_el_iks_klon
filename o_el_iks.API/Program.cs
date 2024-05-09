@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using o_el_iks.API;
 using o_el_iks.API.Entities;
 
@@ -12,7 +12,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IUserProvider, UserProvider>();
 builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
-
+builder.Services.AddScoped<IAuctionsService, AuctionsService>();
+var connectionString = builder.Configuration.GetConnectionString("Database");
+builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(connectionString));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -59,7 +61,7 @@ app.MapPost("/register", ([FromBody] RegistrationData data, IUserProvider userPr
             return Results.BadRequest(ex.Message);
         }
     }
-    );
+});
 
 app.MapPost("/sign-in",
     (SignInData data, IUserProvider userProvider, ITokenProvider tokenProvider, HttpContext httpContext) =>

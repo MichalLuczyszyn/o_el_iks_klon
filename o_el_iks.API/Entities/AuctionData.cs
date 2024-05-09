@@ -2,9 +2,9 @@
 
 public class AuctionData
 {
-    public float price { get; set; }
-    public string location { get; set; } 
-    public DateTimeOffset dateOfStart { get; set; }
-    public DateTimeOffset dateOfEnd { get; set; }
-    public TypeOfItem condition { get; set; }
+    public float Price { get; set; }
+    public string Location { get; set; } 
+    public DateTimeOffset DateOfStart { get; set; }
+    public DateTimeOffset DateOfEnd { get; set; }
+    public TypeOfItem Condition { get; set; }
 }
