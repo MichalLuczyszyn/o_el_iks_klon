@@ -4,5 +4,5 @@ namespace o_el_iks.API.Interfaces;
 
 public interface IAuctionsEditor
 {
-    void EditAuction(string location, AuctionData newData);
+    void EditAuction(Guid id, AuctionData newData);
 }

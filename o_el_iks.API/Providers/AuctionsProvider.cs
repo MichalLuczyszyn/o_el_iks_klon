@@ -16,11 +16,12 @@ public class AuctionsProvider : IAuctionsProvider
         }
         AuctionData newAuction = new AuctionData
         {
+            Id = Guid.NewGuid(),
             Price = data.Price, 
             Location = data.Location, 
             DateOfStart = data.DateOfStart,
             DateOfEnd = data.DateOfEnd, 
-            Condition = data.Condition,
+            Condition = data.Condition
         };
         Auctions.Add(newAuction);
     }

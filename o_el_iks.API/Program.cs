@@ -19,6 +19,7 @@ builder.Services.AddScoped<IAuctionsService, AuctionsService>();
 builder.Services.AddScoped<IAuctionsEditor, AuctionsEditor>();
 var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(connectionString));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -98,17 +99,10 @@ app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider a
 
 app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
 
-app.MapPut("/edit-auction", (string location, AuctionData data, IAuctionsEditor auctionsEditor) =>
+app.MapPut("/edit-auction", (Guid id, AuctionData data, IAuctionsEditor auctionsEditor) =>
 {
-    try
-    {
-        auctionsEditor.EditAuction(location, data);
+        auctionsEditor.EditAuction(id, data);
         return Results.Ok("Auction edited.");
-    }
-    catch (Exception ex)
-    {
-        return Results.BadRequest(ex.Message);
-    }
 });
 
 

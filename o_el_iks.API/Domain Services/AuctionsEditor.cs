@@ -5,16 +5,14 @@ namespace o_el_iks.API.Domain_Services;
 
 public class AuctionsEditor(IAuctionsProvider auctionsProvider) : IAuctionsEditor
 {
-    public void EditAuction(string location, AuctionData newData)
+    public void EditAuction(Guid id, AuctionData newData)
     {
-        var auction = auctionsProvider.GetAuctions().FirstOrDefault(a => a.Location == location);
-        if (auction == null)
+        var auction = auctionsProvider.GetAuctions().FirstOrDefault(a => a.Id == id);
+        if (auction != null)
         {
-            throw new ArgumentException("Auction does not exist.");
+            auction.UpdateAuction(newData.Price, newData.Location, newData.DateOfEnd, newData.Condition);
+            var index = auctionsProvider.GetAuctions().FindIndex(a => a.Id == id);
+            auctionsProvider.GetAuctions()[index] = auction;
         }
-
-        auction.Price = newData.Price;
-        auction.DateOfEnd = newData.DateOfEnd;
-        auction.Condition = newData.Condition;
     }
 }
