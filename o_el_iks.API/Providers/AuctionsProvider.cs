@@ -7,10 +7,10 @@ public class AuctionsProvider : IAuctionsProvider
 {
     public static List<AuctionData> Auctions = new List<AuctionData>();
 
-    public void AddAuction(AuctionData data)
+    public void AddAuction(AuctionCreate data)
     {
-        if (data.Price == 0 || string.IsNullOrWhiteSpace(data.Location) || data.DateOfStart == default ||
-            data.DateOfEnd == default || data.Condition is not (TypeOfItem.New or TypeOfItem.Old or TypeOfItem.Used) )
+        if (data.Price == 0 || string.IsNullOrWhiteSpace(data.Location) || data.DateOfEnd == default 
+            || data.Condition is not (TypeOfItem.New or TypeOfItem.Old or TypeOfItem.Used) )
         {
             throw new ArgumentException("Incorrect data.");
         }
@@ -19,7 +19,7 @@ public class AuctionsProvider : IAuctionsProvider
             Id = Guid.NewGuid(),
             Price = data.Price, 
             Location = data.Location, 
-            DateOfStart = data.DateOfStart,
+            DateOfStart = DateTimeOffset.UtcNow,
             DateOfEnd = data.DateOfEnd, 
             Condition = data.Condition
         };

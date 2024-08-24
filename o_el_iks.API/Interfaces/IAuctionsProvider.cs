@@ -4,6 +4,6 @@ namespace o_el_iks.API.Interfaces;
 
 public interface IAuctionsProvider
 {
-    void AddAuction(AuctionData data);
+    void AddAuction(AuctionCreate data);
     List<AuctionData> GetAuctions();
 }
