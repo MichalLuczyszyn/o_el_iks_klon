@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using o_el_iks.API;
+using o_el_iks.API.DAL;
+using o_el_iks.API.Domain_Services;
 using o_el_iks.API.Entities;
+using o_el_iks.API.Interfaces;
+using o_el_iks.API.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IUserProvider, UserProvider>();
 builder.Services.AddScoped<IAuctionsProvider, AuctionsProvider>();
 builder.Services.AddScoped<IAuctionsService, AuctionsService>();
-var connectionString = builder.Configuration.GetConnectionString("Database");
-builder.Services.AddDbContext<AppDbContext>(x => x.UseNpgsql(connectionString));
+builder.Services.AddScoped<IAuctionsEditor, AuctionsEditor>();
+builder.Services.AddPostgres(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +26,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
 
 var summaries = new[]
 {
@@ -79,7 +82,7 @@ app.MapPost("/sign-in",
 
 app.MapGet("/view-users", (IUserProvider userProvider) => userProvider.GetUsers());
 
-app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider auctionProvider) =>
+app.MapPost("/create-auction", ([FromBody] AuctionCreate data, IAuctionsProvider auctionProvider) =>
 {
     try
     {
@@ -93,6 +96,15 @@ app.MapPost("/create-auction", ([FromBody] AuctionData data, IAuctionsProvider a
 });
 
 app.MapGet("/view-auctions", (IAuctionsProvider auctionProvider) => auctionProvider.GetAuctions());
+
+app.MapPut("/edit-auction", (Guid id, AuctionData data, IAuctionsEditor auctionsEditor) =>
+{
+        auctionsEditor.EditAuction(id, data);
+        return Results.Ok("Auction edited.");
+});
+
+
+
 app.Run();
 
 

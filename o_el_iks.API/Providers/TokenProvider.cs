@@ -1,4 +1,6 @@
-﻿namespace o_el_iks.API;
+﻿using o_el_iks.API.Interfaces;
+
+namespace o_el_iks.API.Providers;
 
 public class TokenProvider : ITokenProvider
 {

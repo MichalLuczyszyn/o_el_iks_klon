@@ -1,16 +1,17 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using o_el_iks.API.Entities;
+using o_el_iks.API.Interfaces;
 
-namespace o_el_iks.API;
+namespace o_el_iks.API.Providers;
 
 public class UserProvider(IAuctionsService auctionsService) : IUserProvider
 {
-    public static List<User> _users = new List<User>();
+    public static List<User> Users = new List<User>();
 
     public void Register(RegistrationData data)
     {
-        var userExists = _users.Any(u => u.Email == data.Email);
+        var userExists = Users.Any(u => u.Email == data.Email);
         if (userExists)
         {
             throw new ArgumentException("User with that email already exists");
@@ -21,13 +22,19 @@ public class UserProvider(IAuctionsService auctionsService) : IUserProvider
             throw new ArgumentException("Incorrect data.");
         }
         string hashedPassword = ShaHash(data.Password);
-        var newUser = new User { Email = data.Email, Password = hashedPassword };
-        _users.Add(newUser);
+        var newUser = new User 
+        { 
+            Id = Guid.NewGuid(),
+            Email = data.Email, 
+            Password = hashedPassword,
+            AccountCreationDate = DateTimeOffset.UtcNow
+        };
+        Users.Add(newUser);
     }
 
     public void SignIn(SignInData data, ITokenProvider tokenProvider, HttpContext httpContext)
     {
-        var user = _users.Any(u => u.Email == data.Email && u.Password == ShaHash(data.Password));
+        var user = Users.Any(u => u.Email == data.Email && u.Password == ShaHash(data.Password));
         if (!user)
         {
             throw new ArgumentException("Incorrect email or password.");
@@ -53,10 +60,10 @@ public class UserProvider(IAuctionsService auctionsService) : IUserProvider
 
     public List<User> GetUsers()
     {
-        foreach (var user in _users)
+        foreach (var user in Users)
         {
             user.Auctions = auctionsService.ViewAuctions();
         }
-        return _users;
+        return Users;
     }
 }
